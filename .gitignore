@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+.next/
+out/
+build/
+__pycache__/
+*.pyc
+.venv/
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Prisma
+packages/db/src/generated/
+
+# Turbo
+.turbo/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp

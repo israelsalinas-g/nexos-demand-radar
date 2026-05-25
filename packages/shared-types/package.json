@@ -1,0 +1,9 @@
+{
+  "name": "@radar/shared-types",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./src/index.ts",
+  "dependencies": {
+    "@radar/db": "workspace:*"
+  }
+}

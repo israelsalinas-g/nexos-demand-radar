@@ -1,0 +1,21 @@
+{
+  "name": "@radar/collector-worker",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@radar/db": "workspace:*",
+    "@radar/logger": "workspace:*",
+    "@radar/queue": "workspace:*",
+    "axios": "^1.6.0",
+    "rss-parser": "^3.13.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.0",
+    "typescript": "^5.4.0"
+  }
+}

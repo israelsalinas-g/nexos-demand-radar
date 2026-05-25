@@ -1,0 +1,47 @@
+Table User
+id
+email
+name
+created_at
+
+Table Organizations
+id
+name
+plan
+created_at
+
+Table Sources
+id
+name
+type
+url
+status
+last_checked_at
+
+Table Collected_Items
+id
+source_id
+external_id
+url
+title
+body
+raw_payload jsonb
+published_at
+
+Table Extrated_Signals
+id
+item_id
+category
+intent
+score
+location
+price
+metadata jsonb
+
+Table Alerts
+id
+organization_id
+query
+filters jsonb
+channel
+

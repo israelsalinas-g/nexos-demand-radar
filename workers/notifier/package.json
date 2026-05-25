@@ -1,0 +1,21 @@
+{
+  "name": "@radar/notifier-worker",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@radar/db": "workspace:*",
+    "@radar/logger": "workspace:*",
+    "@radar/queue": "workspace:*",
+    "resend": "^3.2.0",
+    "node-telegram-bot-api": "^0.64.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.0",
+    "typescript": "^5.4.0"
+  }
+}

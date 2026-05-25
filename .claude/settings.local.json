@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\user\\\\Downloads\\\\TrainingAI\\\\nexos-demand-radar\" -Recurse -Depth 2)",
+      "Bash(Select-Object FullName)"
+    ]
+  }
+}

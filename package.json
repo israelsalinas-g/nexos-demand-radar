@@ -1,0 +1,23 @@
+{
+  "name": "nexos-demand-radar",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "type-check": "turbo run type-check",
+    "db:migrate": "turbo run db:migrate --filter=@radar/db",
+    "db:generate": "turbo run db:generate --filter=@radar/db"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0",
+    "typescript": "^5.4.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "workers/*",
+    "packages/*"
+  ],
+  "packageManager": "pnpm@9.1.0"
+}

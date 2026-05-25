@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/api";
+import { Plus, Bell, Mail, Send, Pause, Play, Trash2, Link as LinkIcon } from "lucide-react";
 
 interface SavedSearch { id: string; name: string }
 interface Alert {
@@ -11,6 +12,12 @@ interface Alert {
   isActive: boolean;
   savedSearch: { id: string; name: string } | null;
   createdAt: string;
+}
+
+function ChannelIcon({ channel }: { channel: string }) {
+  if (channel === "email") return <Mail className="w-4 h-4 text-blue-500" />;
+  if (channel === "telegram") return <Send className="w-4 h-4 text-sky-500" />;
+  return <LinkIcon className="w-4 h-4 text-slate-400" />;
 }
 
 export default function AlertsPage() {
@@ -78,31 +85,39 @@ export default function AlertsPage() {
     await load();
   }
 
-  const channelIcon: Record<string, string> = { email: "📧", telegram: "✈️", webhook: "🔗" };
-
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Alertas</h1>
+      {/* Header */}
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Alertas</h1>
+          <p className="text-sm text-slate-500 mt-0.5">Recibe notificaciones cuando se detecten señales</p>
+        </div>
+      </div>
 
-      <div className="bg-white rounded-lg shadow p-5">
-        <h2 className="font-semibold text-gray-700 mb-4">Nueva alerta</h2>
-        <form onSubmit={handleCreate} className="grid grid-cols-2 gap-3">
+      {/* Create form */}
+      <div className="card p-6">
+        <h2 className="section-title flex items-center gap-2">
+          <Plus className="w-4 h-4 text-slate-400" />
+          Nueva alerta
+        </h2>
+        <form onSubmit={handleCreate} className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs text-gray-600 mb-1">Nombre</label>
+            <label className="label">Nombre</label>
             <input
               value={form.name}
               onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
               placeholder="Alerta Toyota Hilux"
-              className="w-full border rounded-md px-2 py-1.5 text-sm"
+              className="input"
               required
             />
           </div>
           <div>
-            <label className="block text-xs text-gray-600 mb-1">Búsqueda guardada</label>
+            <label className="label">Búsqueda vinculada <span className="text-slate-400 font-normal">(opcional)</span></label>
             <select
               value={form.savedSearchId}
               onChange={(e) => setForm((f) => ({ ...f, savedSearchId: e.target.value }))}
-              className="w-full border rounded-md px-2 py-1.5 text-sm"
+              className="input"
             >
               <option value="">Sin búsqueda vinculada</option>
               {savedSearches.map((ss) => (
@@ -111,11 +126,11 @@ export default function AlertsPage() {
             </select>
           </div>
           <div>
-            <label className="block text-xs text-gray-600 mb-1">Canal</label>
+            <label className="label">Canal</label>
             <select
               value={form.channel}
               onChange={(e) => setForm((f) => ({ ...f, channel: e.target.value }))}
-              className="w-full border rounded-md px-2 py-1.5 text-sm"
+              className="input"
             >
               <option value="email">Email</option>
               <option value="telegram">Telegram</option>
@@ -123,76 +138,98 @@ export default function AlertsPage() {
           </div>
           {form.channel === "email" && (
             <div>
-              <label className="block text-xs text-gray-600 mb-1">Email destino</label>
+              <label className="label">Email destino</label>
               <input
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                 placeholder="tu@empresa.com"
-                className="w-full border rounded-md px-2 py-1.5 text-sm"
+                className="input"
               />
             </div>
           )}
           {form.channel === "telegram" && (
             <div>
-              <label className="block text-xs text-gray-600 mb-1">Telegram Chat ID</label>
+              <label className="label">Telegram Chat ID</label>
               <input
                 value={form.chatId}
                 onChange={(e) => setForm((f) => ({ ...f, chatId: e.target.value }))}
                 placeholder="-100123456789"
-                className="w-full border rounded-md px-2 py-1.5 text-sm"
+                className="input"
               />
             </div>
           )}
-          <div className="col-span-2">
-            <button
-              type="submit"
-              disabled={creating}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition disabled:opacity-60"
-            >
+          <div className="md:col-span-2">
+            <button type="submit" disabled={creating} className="btn-primary">
+              <Plus className="w-4 h-4" />
               {creating ? "Creando..." : "Crear alerta"}
             </button>
           </div>
         </form>
       </div>
 
+      {/* Alerts list */}
       <div className="space-y-3">
         {loading ? (
-          <div className="text-gray-400">Cargando...</div>
+          <div className="space-y-3">
+            {[...Array(2)].map((_, i) => (
+              <div key={i} className="card p-5 animate-pulse flex gap-4">
+                <div className="skeleton w-8 h-8 rounded-xl shrink-0" />
+                <div className="flex-1 space-y-2">
+                  <div className="skeleton h-4 w-36" />
+                  <div className="skeleton h-3 w-24" />
+                </div>
+              </div>
+            ))}
+          </div>
         ) : alerts.length === 0 ? (
-          <div className="text-gray-400">No hay alertas. Crea una arriba.</div>
+          <div className="card flex flex-col items-center justify-center py-16 text-center px-4">
+            <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center mb-4">
+              <Bell className="w-6 h-6 text-slate-400" />
+            </div>
+            <h3 className="text-sm font-semibold text-slate-700 mb-1">Sin alertas configuradas</h3>
+            <p className="text-sm text-slate-400">Crea una alerta para recibir notificaciones de señales.</p>
+          </div>
         ) : (
           alerts.map((a) => (
-            <div key={a.id} className="bg-white rounded-lg shadow p-4 flex items-center justify-between gap-4">
-              <div>
-                <div className="font-medium text-gray-900">
-                  {channelIcon[a.channel] ?? "📢"} {a.name}
+            <div key={a.id} className="card p-5 flex items-center justify-between gap-4 hover:shadow-card-hover transition-shadow">
+              <div className="flex items-center gap-4 min-w-0">
+                <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
+                  <ChannelIcon channel={a.channel} />
                 </div>
-                {a.savedSearch && (
-                  <div className="text-xs text-gray-500 mt-0.5">
-                    Búsqueda: {a.savedSearch.name}
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="font-semibold text-slate-900 truncate">{a.name}</span>
+                    <span className={`badge text-xs ${a.isActive ? "bg-emerald-50 text-emerald-700 border border-emerald-200" : "bg-slate-100 text-slate-500 border border-slate-200"}`}>
+                      {a.isActive ? "Activa" : "Pausada"}
+                    </span>
                   </div>
-                )}
-                <div className="text-xs text-gray-400 mt-0.5">
-                  {a.channel === "email" && a.channelConfig["email"]}
-                  {a.channel === "telegram" && `Chat: ${a.channelConfig["chatId"]}`}
+                  {a.savedSearch && (
+                    <div className="text-xs text-slate-500">
+                      Búsqueda: <span className="text-slate-700">{a.savedSearch.name}</span>
+                    </div>
+                  )}
+                  <div className="text-xs text-slate-400">
+                    {a.channel === "email" && a.channelConfig["email"]}
+                    {a.channel === "telegram" && `Chat ID: ${a.channelConfig["chatId"]}`}
+                  </div>
                 </div>
               </div>
               <div className="flex gap-2 shrink-0">
                 <button
                   onClick={() => handleToggle(a.id, a.isActive)}
-                  className={`text-xs px-3 py-1.5 rounded-md transition ${
-                    a.isActive
-                      ? "bg-green-100 text-green-700 hover:bg-green-200"
-                      : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-                  }`}
+                  className="btn-ghost"
+                  title={a.isActive ? "Pausar" : "Activar"}
                 >
-                  {a.isActive ? "Activa" : "Pausada"}
+                  {a.isActive ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+                  {a.isActive ? "Pausar" : "Activar"}
                 </button>
                 <button
                   onClick={() => handleDelete(a.id)}
-                  className="text-xs bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-md transition"
+                  className="btn-danger"
+                  title="Eliminar"
                 >
+                  <Trash2 className="w-3.5 h-3.5" />
                   Eliminar
                 </button>
               </div>

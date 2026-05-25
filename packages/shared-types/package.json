@@ -2,8 +2,15 @@
   "name": "@radar/shared-types",
   "version": "0.0.1",
   "private": true,
-  "main": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
   "dependencies": {
     "@radar/db": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
   }
 }

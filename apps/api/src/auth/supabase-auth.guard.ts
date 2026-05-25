@@ -6,6 +6,7 @@ import {
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { createClient } from "@supabase/supabase-js";
+import ws from "ws";
 import { IS_PUBLIC_KEY } from "./public.decorator";
 
 @Injectable()
@@ -13,6 +14,8 @@ export class SupabaseAuthGuard implements CanActivate {
   private supabase = createClient(
     process.env.SUPABASE_URL!,
     process.env.SUPABASE_ANON_KEY!,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    { realtime: { transport: ws as any } },
   );
 
   constructor(private reflector: Reflector) {}

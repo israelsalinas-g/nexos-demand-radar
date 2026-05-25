@@ -18,7 +18,7 @@ export class SavedSearchesService {
         createdBy: userId,
         name: dto.name,
         keywords: dto.keywords ?? [],
-        filters: dto.filters ?? {},
+        filters: (dto.filters ?? {}) as object,
         isActive: dto.isActive ?? true,
       },
     });
@@ -48,7 +48,7 @@ export class SavedSearchesService {
       data: {
         ...(dto.name !== undefined && { name: dto.name }),
         ...(dto.keywords !== undefined && { keywords: dto.keywords }),
-        ...(dto.filters !== undefined && { filters: dto.filters }),
+        ...(dto.filters !== undefined && { filters: dto.filters as object }),
         ...(dto.isActive !== undefined && { isActive: dto.isActive }),
       },
     });
